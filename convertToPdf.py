@@ -1,20 +1,11 @@
 import pandas as pd
-from reportlab.pdfgen.canvas import Canvas
-from reportlab.lib.pagesizes import LETTER
-from reportlab.lib.units import inch
 import os
 from datetime import datetime, timedelta
-from xhtml2pdf import pisa
-
-def convert_html_to_pdf(html_string, pdf_path):
-    with open(pdf_path, "wb") as pdf_file:
-        pisa_status = pisa.CreatePDF(html_string, dest=pdf_file)
-    return not pisa_status.err
 
 def main():
     df = pd.read_csv("./data/chat_conversation_multi_day.csv") # Modify accorginly
     
-    date_format = "%Y-%m-%d %H:%M:%S" #Change acorginly
+    date_format = "%Y/%m/%d %H:%M:%S" #Change acorginly
     
     df = df.rename(columns={  #I modified column name to be consistent with my mock data modify acorginly
     "Sender": "from",
@@ -95,7 +86,6 @@ def main():
                 # Format filename: GroupName_YYYY-MM-DD.html
                 safe_group_name = "".join(c for c in group if c.isalnum() or c in (" ", "_")).rstrip()
                 file_name = f"{output_folder}/{safe_group_name}_{current_date.strftime('%Y-%m-%d')}.html"
-                convert_html_to_pdf(html_content,f"{output_folder}/{safe_group_name}_{current_date.strftime('%Y-%m-%d')}.pdf")
                 with open(file_name, "w", encoding="utf-8") as f:
                     f.write(html_content)
                 
