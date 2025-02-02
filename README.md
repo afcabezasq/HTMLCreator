@@ -1,4 +1,4 @@
+How to run?
 ```
-pip install -r requirements.txt
-python converToPdf.py
+python converterUi.py
 ```
