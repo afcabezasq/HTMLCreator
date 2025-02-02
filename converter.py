@@ -67,6 +67,7 @@ def generate_html(groups, date_format="%Y-%m-%d %H:%M:%S", output_folder="messag
                         .sender .message-bubble {{ background: #AEDFF7; }}  /* Light Blue */
                         .receiver .message-bubble {{ background: #FDCB9E; }} /* Light Orange */
                         .timestamp {{ font-size: 12px; color: #888; text-align: right; margin-top: 5px; }}
+                        .tags {{ display: flex;  }}
                     </style>
                 </head>
                 <body>
@@ -74,6 +75,7 @@ def generate_html(groups, date_format="%Y-%m-%d %H:%M:%S", output_folder="messag
                         <h2 style="text-align:center;">{g} - Messages from {current_date.strftime('%Y-%m-%d')}</h2>
                 """
             sender_receiver = {}
+            messaage_id = 0
             for date, sender, receiver, chatgroup, text in entries_by_day:
                 if "sender" not in sender_receiver:
                     sender_receiver['sender'] = sender
@@ -85,9 +87,40 @@ def generate_html(groups, date_format="%Y-%m-%d %H:%M:%S", output_folder="messag
                         <div class="message-bubble receiver">
                             <p>{text}</p>
                         </div>
+                        <div class="tags" >
+                            <input type="checkbox" id="remove-{messaage_id}" name="remove-tag" value="Remove" onchange="change(this.id)" haschecked="false">
+                            <label for="remove-tag"> Remove </label><br>
+                        </div>
+                        
                     </div>
                     """
-            html_content += "</div></body></html>"
+                messaage_id += 1
+            html_content += """</div>
+            </body>
+            <script>
+                const tags = document.querySelectorAll('input')
+                    tags.forEach(t => {
+                        if(t.getAttribute('haschecked') == "true"){
+                            t.checked = true;
+                        }else{
+                            t.checked = false;
+                        }
+                    })
+
+                function change(id){
+                    console.log(id)
+                    tag = document.querySelector("#"+id)
+                    
+                    if(tag.getAttribute('haschecked') == "true"){
+                        tag.checked = false;
+                        tag.setAttribute('haschecked',"false")
+                    }else{
+                        tag.checked = true;
+                        tag.setAttribute('haschecked',"true")
+                    }
+                }
+            </script>
+            </html>"""
             safe_group_name = g.replace(" ","")
             file_name = f"{output_folder}/{safe_group_name}_{current_date.strftime('%Y-%m-%d')}.html"
             with open(file_name, "w", encoding="utf-8") as f:
