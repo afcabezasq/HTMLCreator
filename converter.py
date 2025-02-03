@@ -51,7 +51,9 @@ def generate_html(groups, date_format="%Y-%m-%d %H:%M:%S", output_folder="messag
                    ):
                 entries_by_day.append(groups[g]['entries'][index])
                 index += 1
-            
+            if len(entries_by_day) == 0:
+                current_date = next_date
+                continue
             html_content = f"""
                 <html>
                 <head>
