@@ -39,7 +39,7 @@ def generate_html(groups, date_format="%Y-%m-%d %H:%M:%S", output_folder="messag
         start = start - timedelta(hours=start.hour)
         
         end = datetime.strptime(groups[g]['entries'][-1][0],date_format)
-        end = end - timedelta(hours=end.hour)
+        end = end - timedelta(hours=end.hour) - timedelta(minutes=end.minute) - timedelta(seconds=end.second)
         end_date = end + timedelta(days=1)
         index = 0
         current_date = start
