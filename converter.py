@@ -36,7 +36,7 @@ def generate_html(groups, date_format="%Y-%m-%d %H:%M:%S", output_folder="messag
         groups[g]['entries'] = sorted(groups[g]['entries'], key=lambda x: datetime.strptime(x[0],date_format))
         
         start = datetime.strptime(groups[g]['entries'][0][0],date_format)
-        start = start - timedelta(hours=start.hour)
+        start = start - timedelta(hours=start.hour) - timedelta(minutes=start.minute) - timedelta(seconds=start.second)
         
         end = datetime.strptime(groups[g]['entries'][-1][0],date_format)
         end = end - timedelta(hours=end.hour) - timedelta(minutes=end.minute) - timedelta(seconds=end.second)
