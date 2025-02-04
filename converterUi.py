@@ -19,14 +19,14 @@ window = tk.Tk()
 window.title('File Explorer')
   
 # Set window size
-window.geometry("300x150")
+window.geometry("350x150")
   
 #Set window background color
 window.config(background = "white")
   
 # Create a File Explorer label
 label_file_explorer = tk.Label(window, 
-                            text = "File Explorer using Tkinter",
+                            text = "Search Desired File",
                             width = 20, height = 4, 
                             fg = "blue")
 label_select_format = tk.Label(window, 
@@ -54,13 +54,13 @@ label_select_format.grid(column = 0, row = 1)
 
 selected_format = tk.StringVar()
 
-formats =("%Y-%m-%d %H:%M:%S",
-          "%Y/%m/%d %H:%M:%S",
-          "%m/%d/%Y %I:%M:%S %p")
+formats =(("YYYY-MM-DD HH:MM:SS","%Y-%m-%d %H:%M:%S"),
+          ("YYYY/MM/DD HH:MM:SS","%Y/%m/%d %H:%M:%S"),
+          ("MM/DD/YYYY HH:MM:SS AM/PM","%m/%d/%Y %I:%M:%S %p"))
 
 row = 2
-for f in formats:
-    r = ttk.Radiobutton(window,text=f,value=f, variable=selected_format)
+for text, format in formats:
+    r = ttk.Radiobutton(window,text=text,value=format, variable=selected_format)
     r.grid(column=0,row=row)
     row += 1
   
