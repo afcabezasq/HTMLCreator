@@ -54,7 +54,9 @@ label_select_format.grid(column = 0, row = 1)
 
 selected_format = tk.StringVar()
 
-formats =("%Y-%m-%d %H:%M:%S","%Y/%m/%d %H:%M:%S")
+formats =("%Y-%m-%d %H:%M:%S",
+          "%Y/%m/%d %H:%M:%S",
+          "%m/%d/%Y %I:%M:%S %p")
 
 row = 2
 for f in formats:
