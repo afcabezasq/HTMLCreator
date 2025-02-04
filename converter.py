@@ -31,6 +31,16 @@ def read_csv(filename, date_format="%Y-%m-%d %H:%M:%S"):
                     
     return groups
 
+def create_empty_html_file_if_not_exists(file_name):
+    if not os.path.exists(file_name):
+        with open(file_name, "w", encoding="utf-8") as f:
+            f.write("")
+        print(f"Archivo HTML vacío creado: {file_name}")
+    else:
+        print(f"El archivo HTML ya existe: {file_name}")
+
+
+
 def generate_html(groups, date_format="%Y-%m-%d %H:%M:%S", output_folder="message_html"):
     for g in groups:
         groups[g]['entries'] = sorted(groups[g]['entries'], key=lambda x: datetime.strptime(x[0],date_format))
@@ -125,6 +135,7 @@ def generate_html(groups, date_format="%Y-%m-%d %H:%M:%S", output_folder="messag
             </html>"""
             safe_group_name = g.replace(" ","")
             file_name = f"{output_folder}/{safe_group_name}_{current_date.strftime('%Y-%m-%d')}.html"
+            #create_empty_html_file_if_not_exists(file_name)
             with open(file_name, "w", encoding="utf-8") as f:
                 f.write(html_content)    
             print(f"Saved: {file_name}")
