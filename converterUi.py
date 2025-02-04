@@ -17,7 +17,7 @@ def browseFiles():
 window = tk.Tk()
 # Set window title
 window.title("Crowell's HTML Files Generator")
-window.iconbitmap('./img/favicon.ico')
+# window.iconbitmap('./img/favicon.ico')
   
 # Set window size
 window.geometry("350x150")
