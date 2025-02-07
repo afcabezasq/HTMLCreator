@@ -95,7 +95,7 @@ def generate_reviewed_csvs(foldername:str):
     for root, dirs, files in os.walk(foldername):
         for file in files:
             get_csv(os.path.join(root, file))
-generate_reviewed_csvs("message_html")
+# generate_reviewed_csvs("message_html")
 
 def clean_data(foldername:str, output_name:str = "cleaned_data.csv"):
     converter.create_folder("cleaned_data")
@@ -115,4 +115,4 @@ def clean_data(foldername:str, output_name:str = "cleaned_data.csv"):
                     
 
 
-clean_data("reviewed_data")
+# clean_data("reviewed_data")
