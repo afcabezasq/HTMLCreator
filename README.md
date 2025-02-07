@@ -1,8 +1,13 @@
-If python command is not working outside the installation folder, paste both converter.py and converterUi.py over the installation folder.
+If python command is not working outside the installation folder, paste 
+- app.py
+- converter.py
+- htmlParser.py
+- uiComponents.py 
+ over the python installation folder.
 
 How to run?
 ```
-python converterUi.py
+python app.py
 ```
 
 Select date Format with the radio button
