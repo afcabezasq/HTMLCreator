@@ -32,6 +32,7 @@ def read_csv(filename, date_format="%Y-%m-%d %H:%M:%S"):
     return groups
 
 def generate_html(groups, date_format="%Y-%m-%d %H:%M:%S", output_folder="message_html"):
+    create_folder(output_folder)
     for g in groups:
         groups[g]['entries'] = sorted(groups[g]['entries'], key=lambda x: datetime.strptime(x[0],date_format))
         
@@ -134,6 +135,7 @@ def generate_html(groups, date_format="%Y-%m-%d %H:%M:%S", output_folder="messag
 
         
 def main():
+    
     g = read_csv("data/chat_conversation_multi_day.csv")
     generate_html(g)
 
