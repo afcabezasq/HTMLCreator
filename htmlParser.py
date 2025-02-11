@@ -2,6 +2,8 @@ from html.parser import HTMLParser
 import converter 
 import csv
 import os
+from datetime import datetime, timedelta
+
 class MessagesParser(HTMLParser):
     def __init__(self):
         super().__init__()
@@ -52,10 +54,8 @@ def get_csv(filename:str):
         parse = MessagesParser()
         parse.feed(file.read())
         table = parse.extracted_data
-        print(parse.index)
         del table[-1]
         chat_group = parse.extracted_data["Chat Group"].split(" - ")[0]
-        print(parse.extracted_data)
         for i in range(parse.index + 1):
             
             send_date, message, remove_flag = parse.extracted_data[i]
@@ -73,14 +73,13 @@ def get_csv(filename:str):
                 "Text": message,
                 "Remove": value_flag
             })
-            # print(index,":",parse.extracted_data[index])
+
         for d in data:
             if d["Sender"] == senders_values[0]:
                 d["Receiver"] = senders_values[1]
             else:
                 d["Receiver"] = senders_values[0]
-        for d in data:
-            print(d)
+    
     filename = os.path.basename(filename)
     with open(f"reviewed_data/{filename[:-5]}.csv", "w", newline="", encoding="utf-8") as csv_file:
         fieldnames = ["Timestamp","Sender","Receiver","ChatGroup","Text","Remove"]
@@ -97,13 +96,14 @@ def generate_reviewed_csvs(foldername:str):
             get_csv(os.path.join(root, file))
 # generate_reviewed_csvs("message_html")
 
-def clean_data(foldername:str, output_name:str = "cleaned_data.csv"):
-    converter.create_folder("cleaned_data")
+def clean_data(foldername:str, output_name:str="compiled_data.csv", date_format:str = "%Y-%m-%d %H:%M:%S"):
+    output_folder = "compiled_data"
+    converter.create_folder(output_folder)
+    output_file = f"{output_folder}\\{output_name}"
     fieldnames = ["Timestamp","Sender","Receiver","ChatGroup","Text","Remove"]
-    with open(f"cleaned_data/{output_name}",mode="w", encoding="utf-8") as output_csv:
-        writer = csv.writer(output_csv)
+    with open(output_file,mode="w", encoding="utf-8") as output_csv:
+        writer = csv.writer(output_csv,lineterminator="\n")
         writer.writerow(fieldnames)
-        
         for root, dirs, files in os.walk(foldername):
             for file in files:
                 path = os.path.join(root, file) 
@@ -112,7 +112,19 @@ def clean_data(foldername:str, output_name:str = "cleaned_data.csv"):
                     next(reader)
                     for row in reader:
                         writer.writerow(row)
-                    
+                
+    sort_data(f"{output_folder}/{output_name}",date_format)
+                        
+def sort_data(filename:str, date_format:str):
+    
+    with open(filename, mode='r', newline='') as file:
+        reader = csv.reader(file)
+        header = next(reader)  # Extract header
+        sorted_rows = sorted(reader, key=lambda row: datetime.strptime(str(row[0]),date_format) ) # Sort by second column (index 1)
 
 
-# clean_data("reviewed_data")
+    with open(filename, mode='w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(header)  # Write header
+        writer.writerows(sorted_rows)  # Write sorted rows
+    
