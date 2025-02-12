@@ -91,7 +91,7 @@ def generate_html(groups, date_format="%Y-%m-%d %H:%M:%S", output_folder="messag
                             <p>{text}</p>
                         </div>
                         <div class="tags" >
-                            <input type="checkbox" id="remove-{messaage_id}" name="remove-tag" value="Remove" onchange="change(this.id)" haschecked="false">
+                            <input type="checkbox" id="remove-{messaage_id}" name="remove-tag" value="Remove" onchange="change(this.id)" entry="{date};;{sender};;{receiver};;{chatgroup};;{text}" haschecked="false">
                             <label for="remove-tag"> Remove </label><br>
                         </div>
                     </div>
