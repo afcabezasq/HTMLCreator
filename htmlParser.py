@@ -98,8 +98,7 @@ def get_csv(filename:str):
                 "Remove": value_flag
             })
         # print(f"Number of senders: {len(senders_values)}", )
-        if len(senders_values) < 2:
-            if len(parse.people)<2:
+        if len(senders_values) < 2 and len(parse.people)<2:
                 raise OnlySenderInFile(f"File does not contain receiver, Date:{date}, Chat Group:{chat_group}",error_code=2)
         if len(senders_values) == 2:
             for d in data:
