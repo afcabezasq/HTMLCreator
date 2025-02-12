@@ -64,7 +64,8 @@ def get_csv(filename:str):
             send_date = parse.extracted_data[i][0]
             message = parse.extracted_data[i][1]
             remove_flag = parse.extracted_data[i][2]
-            send_date, message, remove_flag = parse.extracted_data[i]
+            # send_date, message, remove_flag = parse.extracted_data[i]
+            print(f"Date: f{send_date}", f"Remove Flag: {remove_flag}")
             sender_date = send_date.split(" - ")
             sender, date = sender_date
             value_flag = remove_flag.split(":")[1]
@@ -99,10 +100,8 @@ def generate_reviewed_csvs(foldername:str):
     converter.create_folder("reviewed_data")
     for root, dirs, files in os.walk(foldername):
         for file in files:
-            try:
-                get_csv(os.path.join(root, file))
-            except:
-                print(f"Format issue with:  {os.path.join(root, file)}")
+            get_csv(os.path.join(root, file))
+            print(f"Format issue with:  {os.path.join(root, file)}")
 # generate_reviewed_csvs("message_html")
 
 def clean_data(foldername:str, output_name:str="compiled_data.csv", date_format:str = "%Y-%m-%d %H:%M:%S"):
@@ -126,13 +125,13 @@ def clean_data(foldername:str, output_name:str="compiled_data.csv", date_format:
                         
 def sort_data(filename:str, date_format:str):
     
-    with open(filename, mode='r', newline='') as file:
+    with open(filename, mode='r', newline='', encoding='utf-8') as file:
         reader = csv.reader(file)
         header = next(reader)  # Extract header
         sorted_rows = sorted(reader, key=lambda row: datetime.strptime(str(row[0]),date_format) ) # Sort by second column (index 1)
 
 
-    with open(filename, mode='w', newline='') as file:
+    with open(filename, mode='w', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
         writer.writerow(header)  # Write header
         writer.writerows(sorted_rows)  # Write sorted rows
