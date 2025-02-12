@@ -22,7 +22,7 @@ class MessagesParser(HTMLParser):
                     self.index += 1
                 self.capture_data = True
         
-        if tag == "title":
+        if tag == "h2":
             self.current_tag = "title"
 
         if tag == 'input':
@@ -39,11 +39,11 @@ class MessagesParser(HTMLParser):
                 self.extracted_data[self.index].append(data_to_add)
         if self.current_tag == "title":
             self.extracted_data["Chat Group"]= data.strip()
-            # self.group_chat[0] = data.strip()
+
             
     def handle_endtag(self, tag):
         self.capture_data = False
-        if tag == "title":
+        if tag == "h2":
             self.current_tag = ""
 
 def get_csv(filename:str):
