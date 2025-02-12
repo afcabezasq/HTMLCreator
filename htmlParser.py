@@ -59,7 +59,8 @@ def get_csv(filename:str):
         for i in range(parse.index + 1):
             if(len(parse.extracted_data[i]) < 3):
                 raise Exception(f"Format Problem with file {filename}")
-            print(f"Entry size: {len(parse.extracted_data[i])}")
+            elif len(parse.extracted_data[i]) > 3:
+                print(f"Entry size: {len(parse.extracted_data[i])}")
             send_date = parse.extracted_data[i][0]
             message = parse.extracted_data[i][1]
             remove_flag = parse.extracted_data[i][2]
