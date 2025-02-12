@@ -94,10 +94,10 @@ def generate_html(groups, date_format="%Y-%m-%d %H:%M:%S", output_folder="messag
                             <input type="checkbox" id="remove-{messaage_id}" name="remove-tag" value="Remove" onchange="change(this.id)" haschecked="false">
                             <label for="remove-tag"> Remove </label><br>
                         </div>
-                        
                     </div>
                     """
                 messaage_id += 1
+            html_content += f"<div people=\"{sender_receiver['sender'] };;{sender_receiver['receiver'] }\"></div>\n"
             html_content += """</div>
             </body>
             <script>

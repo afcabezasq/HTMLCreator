@@ -4,6 +4,15 @@ import csv
 import os
 from datetime import datetime, timedelta
 
+class OnlySenderInFile(Exception):
+    def __init__(self, message, error_code):
+        super().__init__(message)
+        self.message = message
+        self.error_code = error_code
+
+    def __str__(self):
+        return f"{self.message} (Error Code: {self.error_code})"
+
 class MessagesParser(HTMLParser):
     def __init__(self):
         super().__init__()
@@ -13,6 +22,7 @@ class MessagesParser(HTMLParser):
         self.extracted_data = {0:[]}
         self.index = -1
         self.current_tag = ""
+        self.people = []
         
     def handle_starttag(self, tag, attrs):
         for attr, value in attrs:
@@ -21,6 +31,11 @@ class MessagesParser(HTMLParser):
                 if "message" in value.split():
                     self.index += 1
                 self.capture_data = True
+            if attr == "people":
+                people = value.split(";;")
+                self.people.append(people[0])
+                self.people.append(people[1])
+                
         
         if tag == "h2":
             self.current_tag = "title"
@@ -65,10 +80,12 @@ def get_csv(filename:str):
             message = parse.extracted_data[i][1]
             remove_flag = parse.extracted_data[i][2]
             # send_date, message, remove_flag = parse.extracted_data[i]
-            print(f"Date: f{send_date}", f"Remove Flag: {remove_flag}")
+            
             sender_date = send_date.split(" - ")
             sender, date = sender_date
             value_flag = remove_flag.split(":")[1]
+            # print(f"Date: f{date}", f"Remove Flag: {value_flag}")
+            
             if sender not in senders:
                 senders.add(sender)
                 senders_values.append(sender)
@@ -80,12 +97,21 @@ def get_csv(filename:str):
                 "Text": message,
                 "Remove": value_flag
             })
-
-        for d in data:
-            if d["Sender"] == senders_values[0]:
-                d["Receiver"] = senders_values[1]
-            else:
-                d["Receiver"] = senders_values[0]
+        # print(f"Number of senders: {len(senders_values)}", )
+        if len(senders_values) < 2 and len(parse.people)<2:
+                raise OnlySenderInFile(f"File does not contain receiver, Date:{date}, Chat Group:{chat_group}",error_code=2)
+        if len(senders_values) == 2:
+            for d in data:
+                if d["Sender"] == senders_values[0]:
+                    d["Receiver"] = senders_values[1]
+                else:
+                    d["Receiver"] = senders_values[0]
+        if len(parse.people) == 2:
+            for d in data:
+                if d["Sender"] == parse.people[0]:
+                    d["Receiver"] = parse.people[1]
+                else:
+                    d["Receiver"] = parse.people[0]
     
     filename = os.path.basename(filename)
     with open(f"reviewed_data/{filename[:-5]}.csv", "w", newline="", encoding="utf-8") as csv_file:
@@ -100,8 +126,11 @@ def generate_reviewed_csvs(foldername:str):
     converter.create_folder("reviewed_data")
     for root, dirs, files in os.walk(foldername):
         for file in files:
-            get_csv(os.path.join(root, file))
-            print(f"Format issue with:  {os.path.join(root, file)}")
+            try:
+                get_csv(os.path.join(root, file))
+            except OnlySenderInFile as e:
+                print(f"Only sender in file: {e}, File: {os.path.join(root, file)}")
+                
 # generate_reviewed_csvs("message_html")
 
 def clean_data(foldername:str, output_name:str="compiled_data.csv", date_format:str = "%Y-%m-%d %H:%M:%S"):
