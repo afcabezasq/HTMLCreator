@@ -59,6 +59,10 @@ def get_csv(filename:str):
         for i in range(parse.index + 1):
             if(len(parse.extracted_data[i]) < 3):
                 raise Exception(f"Format Problem with file {filename}")
+            print(f"Entry size: {len(parse.extracted_data[i])}")
+            send_date = parse.extracted_data[i][0]
+            message = parse.extracted_data[i][1]
+            remove_flag = parse.extracted_data[i][2]
             send_date, message, remove_flag = parse.extracted_data[i]
             sender_date = send_date.split(" - ")
             sender, date = sender_date
@@ -94,7 +98,10 @@ def generate_reviewed_csvs(foldername:str):
     converter.create_folder("reviewed_data")
     for root, dirs, files in os.walk(foldername):
         for file in files:
-            get_csv(os.path.join(root, file))
+            try:
+                get_csv(os.path.join(root, file))
+            except:
+                print(f"Format issue with:  {os.path.join(root, file)}")
 # generate_reviewed_csvs("message_html")
 
 def clean_data(foldername:str, output_name:str="compiled_data.csv", date_format:str = "%Y-%m-%d %H:%M:%S"):
