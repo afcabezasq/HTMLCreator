@@ -57,7 +57,8 @@ def get_csv(filename:str):
         del table[-1]
         chat_group = parse.extracted_data["Chat Group"].split(" - ")[0]
         for i in range(parse.index + 1):
-            
+            if(len(parse.extracted_data[i]) < 3):
+                raise Exception(f"Format Problem with file {filename}")
             send_date, message, remove_flag = parse.extracted_data[i]
             sender_date = send_date.split(" - ")
             sender, date = sender_date
