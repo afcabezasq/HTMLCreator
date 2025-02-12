@@ -60,6 +60,9 @@ def get_csv(filename:str):
             if(len(parse.extracted_data[i]) < 3):
                 raise Exception(f"Format Problem with file {filename}")
             print(f"Entry size: {len(parse.extracted_data[i])}")
+            send_date = parse.extracted_data[i][0]
+            message = parse.extracted_data[i][1]
+            remove_flag = parse.extracted_data[i][2]
             send_date, message, remove_flag = parse.extracted_data[i]
             sender_date = send_date.split(" - ")
             sender, date = sender_date
