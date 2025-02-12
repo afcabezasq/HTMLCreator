@@ -11,6 +11,7 @@ python app.py
 ```
 
 Select date Format with the radio button
+
 ![alt text](img/selectDateFormat.png)
 
 Search the desired file to convert using the "Browse File" button
