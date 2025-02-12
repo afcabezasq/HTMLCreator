@@ -22,7 +22,7 @@ class MessagesParser(HTMLParser):
                     self.index += 1
                 self.capture_data = True
         
-        if tag == "title":
+        if tag == "h2":
             self.current_tag = "title"
 
         if tag == 'input':
@@ -39,11 +39,11 @@ class MessagesParser(HTMLParser):
                 self.extracted_data[self.index].append(data_to_add)
         if self.current_tag == "title":
             self.extracted_data["Chat Group"]= data.strip()
-            # self.group_chat[0] = data.strip()
+
             
     def handle_endtag(self, tag):
         self.capture_data = False
-        if tag == "title":
+        if tag == "h2":
             self.current_tag = ""
 
 def get_csv(filename:str):
@@ -57,7 +57,8 @@ def get_csv(filename:str):
         del table[-1]
         chat_group = parse.extracted_data["Chat Group"].split(" - ")[0]
         for i in range(parse.index + 1):
-            
+            if(len(parse.extracted_data[i]) < 3):
+                raise Exception(f"Format Problem with file {filename}")
             send_date, message, remove_flag = parse.extracted_data[i]
             sender_date = send_date.split(" - ")
             sender, date = sender_date

@@ -58,7 +58,7 @@ def generate_html(groups, date_format="%Y-%m-%d %H:%M:%S", output_folder="messag
             html_content = f"""
                 <html>
                 <head>
-                    <title>{g} - Messages from {current_date.strftime('%Y-%m-%d')}</title>
+                    <title>{g}_{current_date.strftime('%Y-%m-%d')}</title>
                     <style>
                         body {{ font-family: Arial, sans-serif; background: #f5f5f5; padding: 20px; }}
                         .chat-container {{ max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }}
