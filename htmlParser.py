@@ -16,21 +16,30 @@ class OnlySenderInFile(Exception):
 class MessagesParser(HTMLParser):
     def __init__(self):
         super().__init__()
+        self.info = False
         self.entries = []
         
     def handle_starttag(self, tag, attrs):
         for attr, value in attrs:
-            if attr == "entry":
-                timestamp, sender, receiver, chat_group, text = value.split(";;")
-                self.entries.append(
-                    {"Timestamp":timestamp,
+            if attr == "info":
+                self.info = True
+            if attr == "haschecked":  
+                self.entries[-1]["Remove"] = value
+                
+    def handle_endtag(self,tag):
+        self.info = False
+        
+    def handle_data(self, data):
+        if self.info:
+            data = data.strip()
+            timestamp, sender, receiver, chat_group, text = data.split(";;")
+            self.entries.append({"Timestamp":timestamp,
                     "Sender":sender,
                     "Receiver": receiver, 
                     "ChatGroup": chat_group,
                     "Text": text})
-            if attr == "haschecked":  
-                self.entries[-1]["Remove"] = value
-
+        # print("Encountered some data:", data)
+        
 def get_csv(filename:str):
     with open(filename,'r',encoding='utf-8') as file:
         parse = MessagesParser()

@@ -6,7 +6,7 @@ def create_folder(foldername):
     os.makedirs(foldername, exist_ok=True)
 
 def read_csv(filename, date_format="%Y-%m-%d %H:%M:%S"):
-    with open(filename) as csvfile:
+    with open(filename,"r",encoding='utf-8') as csvfile:
         reader = csv.reader(csvfile, delimiter=',')
         groups = {}
         counter = 0
@@ -80,6 +80,7 @@ def generate_html(groups, date_format="%Y-%m-%d %H:%M:%S", output_folder="messag
             sender_receiver = {}
             messaage_id = 0
             for date, sender, receiver, chatgroup, text in entries_by_day:
+                print(text)
                 if "sender" not in sender_receiver:
                     sender_receiver['sender'] = sender
                     sender_receiver['receiver'] = receiver
@@ -91,7 +92,10 @@ def generate_html(groups, date_format="%Y-%m-%d %H:%M:%S", output_folder="messag
                             <p>{text}</p>
                         </div>
                         <div class="tags" >
-                            <input type="checkbox" id="remove-{messaage_id}" name="remove-tag" value="Remove" onchange="change(this.id)" entry="{date};;{sender};;{receiver};;{chatgroup};;{text}" haschecked="false">
+                            <p info="true" style="visibility: hidden;">
+                                {date};;{sender};;{receiver};;{chatgroup};;{text}
+                            </p>
+                            <input type="checkbox" id="remove-{messaage_id}" name="remove-tag" value="Remove" onchange="change(this.id)"  haschecked="false">
                             <label for="remove-tag"> Remove </label><br>
                         </div>
                     </div>
