@@ -31,22 +31,27 @@ class MessagesParser(HTMLParser):
         
     def handle_data(self, data):
         if self.info:
-            data = data.strip()
-            data = data.split(";;")
-            # timestamp, sender, receiver, chat_group, text = data.split(";;")
-            timestamp = data[0]
-            sender = data[1]
-            receiver = data[2]
-            chat_group = data[3]
-            text = ""
-            if len(data) == 5:
-                text = data[4]
-            
-            self.entries.append({"Timestamp":timestamp,
-                    "Sender":sender,
-                    "Receiver": receiver, 
-                    "ChatGroup": chat_group,
-                    "Text": text})
+            try:
+                data = data.strip()
+                data = data.split(";;")
+                # timestamp, sender, receiver, chat_group, text = data.split(";;")
+                timestamp = data[0]
+                sender = data[1]
+                receiver = data[2]
+                chat_group = data[3]
+                text = ""
+                if len(data) == 5:
+                    text = data[4]
+                
+                self.entries.append({"Timestamp":timestamp,
+                        "Sender":sender,
+                        "Receiver": receiver, 
+                        "ChatGroup": chat_group,
+                        "Text": text})
+            except Exception as e:
+                print(f"Length of data: {len(data)}")
+                print("Problem on extraction")
+                raise e
         # print("Encountered some data:", data)
         
 def get_csv(filename:str):
@@ -55,11 +60,15 @@ def get_csv(filename:str):
         parse.feed(file.read())
         
     filename = os.path.basename(filename)
-    with open(f"reviewed_data/{filename[:-5]}.csv", "w", newline="", encoding="utf-8") as csv_file:
-        fieldnames = ["Timestamp","Sender","Receiver","ChatGroup","Text","Remove"]
-        writer = csv.DictWriter(csv_file,fieldnames)
-        writer.writeheader()
-        writer.writerows(parse.entries)
+    try:
+        with open(f"reviewed_data/{filename[:-5]}.csv", "w", newline="", encoding="utf-8") as csv_file:
+            fieldnames = ["Timestamp","Sender","Receiver","ChatGroup","Text","Remove"]
+            writer = csv.DictWriter(csv_file,fieldnames)
+            writer.writeheader()
+            writer.writerows(parse.entries)
+    except Exception as e:
+        print("Problem at writing data")
+        print(e)
     print(f"Saved: reviewed_data/{filename[:-5]}.csv")
     
 # get_csv("message_html/WorkChat_2024-01-29.html")
@@ -69,8 +78,8 @@ def generate_reviewed_csvs(foldername:str):
         for file in files:
             try:
                 get_csv(os.path.join(root, file))
-                
-            except:
+            except Exception as e:
+                print(e)
                 print(f"Format Issue , File: {os.path.join(root, file)}")
                 
 # generate_reviewed_csvs("message_html")
