@@ -32,7 +32,16 @@ class MessagesParser(HTMLParser):
     def handle_data(self, data):
         if self.info:
             data = data.strip()
-            timestamp, sender, receiver, chat_group, text = data.split(";;")
+            data = data.split(";;")
+            # timestamp, sender, receiver, chat_group, text = data.split(";;")
+            timestamp = data[0]
+            sender = data[1]
+            receiver = data[2]
+            chat_group = data[3]
+            text = ""
+            if len(data) == 5:
+                text = data[4]
+            
             self.entries.append({"Timestamp":timestamp,
                     "Sender":sender,
                     "Receiver": receiver, 
