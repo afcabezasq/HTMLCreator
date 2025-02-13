@@ -135,6 +135,7 @@ def generate_html(groups, date_format="%Y-%m-%d %H:%M:%S", output_folder="messag
             </script>
             </html>"""
             safe_group_name = g.replace(" ","")
+            safe_group_name = safe_group_name.replace(",","-")
             file_name = f"{output_folder}/{safe_group_name}_{current_date.strftime('%Y-%m-%d')}.html"
             with open(file_name, "w", encoding="utf-8") as f:
                 f.write(html_content)    
