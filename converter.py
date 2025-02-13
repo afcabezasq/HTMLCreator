@@ -75,6 +75,7 @@ def generate_html(groups, date_format="%Y-%m-%d %H:%M:%S", output_folder="messag
                         .receiver .message-bubble {{ background: #FDCB9E; }} /* Light Orange */
                         .timestamp {{ font-size: 12px; color: #888; text-align: right; margin-top: 5px; }}
                         .tags {{ display: flex;  }}
+                        .labels {{ font-size: 12px; }}
                     </style>
                 </head>
                 <body>
@@ -104,7 +105,10 @@ def generate_html(groups, date_format="%Y-%m-%d %H:%M:%S", output_folder="messag
                         </div>
                         <div class="tags" >
                             <input type="checkbox" id="remove-{messaage_id}" name="remove-tag" value="Remove" onchange="change(this.id)"  haschecked="false">
-                            <label for="remove-tag"> Remove </label><br>
+                            <label class="labels" for="remove-tag"> Remove </label>
+                            <div style="visibility: hidden; width: 6px;">    </div>
+                            <input type="checkbox" id="further-review-{messaage_id}" name="further-review-tag" value="Further Review" onchange="change(this.id)"  further-review="false">
+                            <label class="labels" for="remove-tag"> Further Review Required</label><br>
                         </div>
                     </div>
                     """
@@ -120,19 +124,38 @@ def generate_html(groups, date_format="%Y-%m-%d %H:%M:%S", output_folder="messag
                         }else{
                             t.checked = false;
                         }
+                        if(t.getAttribute('further-review') == "true"){
+                            t.checked = true;
+                        }else{
+                            t.checked = false;
+                        }
                     })
 
                 function change(id){
                     console.log(id)
                     tag = document.querySelector("#"+id)
                     
-                    if(tag.getAttribute('haschecked') == "true"){
-                        tag.checked = false;
-                        tag.setAttribute('haschecked',"false")
-                    }else{
-                        tag.checked = true;
-                        tag.setAttribute('haschecked',"true")
+                    if(tag.hasAttribute('haschecked')){
+                        if(tag.getAttribute('haschecked') == "true"){
+                            tag.checked = false;
+                            tag.setAttribute('haschecked',"false")
+                        }else{
+                            tag.checked = true;
+                            tag.setAttribute('haschecked',"true")
+                        }
                     }
+                    
+                    if(tag.hasAttribute('further-review')){
+                        if(tag.getAttribute('further-review') == "true"){
+                            tag.checked = false;
+                            tag.setAttribute('further-review',"false")
+                        }else{
+                            tag.checked = true;
+                            tag.setAttribute('further-review',"true")
+                        }
+                    }
+                    
+                    
                 }
             </script>
             </html>"""

@@ -25,7 +25,8 @@ class MessagesParser(HTMLParser):
                 self.info = True
             if attr == "haschecked":  
                 self.entries[-1]["Remove"] = value
-                
+            if attr == "further-review":  
+                self.entries[-1]["Further-Review"] = value
     def handle_endtag(self,tag):
         self.info = False
         
@@ -65,7 +66,7 @@ def get_csv(filename:str):
     filename = os.path.basename(filename)
     try:
         with open(f"reviewed_data/{filename[:-5]}.csv", "w", newline="", encoding="utf-8") as csv_file:
-            fieldnames = ["Timestamp","Sender","Receiver","ChatGroup","Text","Remove"]
+            fieldnames = ["Timestamp","Sender","Receiver","ChatGroup","Text","Remove","Further-Review"]
             writer = csv.DictWriter(csv_file,fieldnames)
             writer.writeheader()
             writer.writerows(parse.entries)
