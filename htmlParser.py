@@ -70,7 +70,8 @@ def generate_reviewed_csvs(foldername:str):
             try:
                 get_csv(os.path.join(root, file))
                 
-            except:
+            except Exception as e:
+                print(e)
                 print(f"Format Issue , File: {os.path.join(root, file)}")
                 
 # generate_reviewed_csvs("message_html")
