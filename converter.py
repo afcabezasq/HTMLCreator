@@ -56,8 +56,10 @@ def generate_html(groups, date_format="%Y-%m-%d %H:%M:%S", output_folder="messag
                 current_date = next_date
                 continue
             html_content = f"""
-                <html>
+                <!DOCTYPE html>
+                <html lang="en">
                 <head>
+                    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
                     <title>{g}_{current_date.strftime('%Y-%m-%d')}</title>
                     <style>
                         body {{ font-family: Arial, sans-serif; background: #f5f5f5; padding: 20px; }}
@@ -80,21 +82,20 @@ def generate_html(groups, date_format="%Y-%m-%d %H:%M:%S", output_folder="messag
             sender_receiver = {}
             messaage_id = 0
             for date, sender, receiver, chatgroup, text in entries_by_day:
-                print(text)
                 if "sender" not in sender_receiver:
                     sender_receiver['sender'] = sender
                     sender_receiver['receiver'] = receiver
                 alignment = "sender" if sender_receiver['sender'] == sender else "receiver"
                 html_content += f"""
                     <div class="message {alignment}">
+                        <p info="true" style="visibility: hidden; height: 1px; margin: 0px">
+                            {date};;{sender};;{receiver};;{chatgroup};;{text}
+                        </p>
                         <div class="message-header">{sender} - {date}</div>
                         <div class="message-bubble receiver">
                             <p>{text}</p>
                         </div>
                         <div class="tags" >
-                            <p info="true" style="visibility: hidden;">
-                                {date};;{sender};;{receiver};;{chatgroup};;{text}
-                            </p>
                             <input type="checkbox" id="remove-{messaage_id}" name="remove-tag" value="Remove" onchange="change(this.id)"  haschecked="false">
                             <label for="remove-tag"> Remove </label><br>
                         </div>
