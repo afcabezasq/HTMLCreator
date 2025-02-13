@@ -33,7 +33,7 @@ class MessagesParser(HTMLParser):
         if self.info:
             try:
                 data = data.strip()
-                data = data.split(";;")
+                data = data.split("|")
                 # timestamp, sender, receiver, chat_group, text = data.split(";;")
                 timestamp = data[0]
                 sender = data[1]
@@ -41,6 +41,9 @@ class MessagesParser(HTMLParser):
                 chat_group = data[3]
                 text = ""
                 if len(data) == 5:
+                    text.replace("&lt;","<")
+                    text.replace("&gt;",">")
+                    text.replace("&amp;","&")
                     text = data[4]
                 
                 self.entries.append({"Timestamp":timestamp,

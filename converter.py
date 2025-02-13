@@ -85,12 +85,17 @@ def generate_html(groups, date_format="%Y-%m-%d %H:%M:%S", output_folder="messag
                 if "sender" not in sender_receiver:
                     sender_receiver['sender'] = sender
                     sender_receiver['receiver'] = receiver
+                # print(date,text)
+                text = text.replace("<","&lt;")
+                text = text.replace(">","&gt;")
+                text = text.replace("&","&amp;")
+
                 alignment = "sender" if sender_receiver['sender'] == sender else "receiver"
                 html_content += f"""
                     <div class="message {alignment}">
-                        <p info="true" style="visibility: hidden; height: 1px; margin: 0px">
-                            {date};;{sender};;{receiver};;{chatgroup};;{text}
-                        </p>
+                        <code info="true" style="visibility: hidden; height: 1px; margin: 0px">
+                            {date}|{sender}|{receiver}|{chatgroup}|{text}
+                        </code>
                         <div class="message-header">{sender} - {date}</div>
                         <div class="message-bubble receiver">
                             <p>{text}</p>
