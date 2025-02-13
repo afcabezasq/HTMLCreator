@@ -55,12 +55,14 @@ def generate_html(groups, date_format="%Y-%m-%d %H:%M:%S", output_folder="messag
             if len(entries_by_day) == 0:
                 current_date = next_date
                 continue
+            safe_group_name = g.replace(" ","")
+            safe_group_name = safe_group_name.replace(",","-")
             html_content = f"""
                 <!DOCTYPE html>
                 <html lang="en">
                 <head>
                     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-                    <title>{g}_{current_date.strftime('%Y-%m-%d')}</title>
+                    <title>{safe_group_name}_{current_date.strftime('%Y-%m-%d')}</title>
                     <style>
                         body {{ font-family: Arial, sans-serif; background: #f5f5f5; padding: 20px; }}
                         .chat-container {{ max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }}
