@@ -121,12 +121,12 @@ def generate_html(groups, date_format="%Y-%m-%d %H:%M:%S", output_folder="messag
                     tags.forEach(t => {
                         if(t.getAttribute('haschecked') == "true"){
                             t.checked = true;
-                        }else{
+                        }else if(t.getAttribute('haschecked') == "false"){
                             t.checked = false;
                         }
                         if(t.getAttribute('further-review') == "true"){
                             t.checked = true;
-                        }else{
+                        }else if(t.getAttribute('further-review') == "false"){
                             t.checked = false;
                         }
                     })
